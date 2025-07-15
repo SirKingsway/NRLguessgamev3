@@ -43,4 +43,4 @@ export default function Home() {
     setHint2(second);
   };
 
-  const handleGues
+  const handleGuess
