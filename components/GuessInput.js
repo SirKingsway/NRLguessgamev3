@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function GuessInput({ onGuess, players }) {
+export default function GuessInput({ onGuess, players, disabled }) {
   const [query, setQuery] = useState("");
   const [filtered, setFiltered] = useState([]);
 
@@ -13,7 +13,9 @@ export default function GuessInput({ onGuess, players }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const selected = players.find(p => p.name.toLowerCase() === query.toLowerCase());
+    const selected = players.find(
+      (p) => p.name.toLowerCase() === query.toLowerCase()
+    );
     if (selected) {
       onGuess(selected);
       setQuery("");
@@ -29,17 +31,16 @@ export default function GuessInput({ onGuess, players }) {
         type="text"
         placeholder="Guess a player..."
         value={query}
+        disabled={disabled}
         onChange={(e) => setQuery(e.target.value)}
         className="w-full px-4 py-2 rounded border border-gray-300"
       />
-      {filtered.length > 0 && (
+      {filtered.length > 0 && !disabled && (
         <ul className="absolute z-10 w-full bg-white border mt-1 rounded shadow text-sm">
           {filtered.map(player => (
             <li
               key={player.id}
-              onClick={() => {
-                setQuery(player.name);
-              }}
+              onClick={() => setQuery(player.name)}
               className="px-4 py-2 cursor-pointer hover:bg-gray-100"
             >
               {player.name}
@@ -47,6 +48,13 @@ export default function GuessInput({ onGuess, players }) {
           ))}
         </ul>
       )}
+      <button
+        type="submit"
+        disabled={disabled}
+        className="mt-2 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+      >
+        Submit Guess
+      </button>
     </form>
   );
 }
